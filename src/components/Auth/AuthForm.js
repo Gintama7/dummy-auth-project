@@ -20,6 +20,26 @@ const AuthForm = () => {
     const enteredPassword = passwordInputRef.current.value;
     setIsSignUp(true);
     if(isLogin){
+      fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyA7Juq0B1seuPsQE0EpCfQm7DB3vTIDEoU',{
+        method:'POST',
+        body: JSON.stringify({
+          email:enteredEmail,
+          password:enteredPassword,
+          returnSecureToken: true
+        }),headers:{
+          'Content-Type':'application/json'
+        }
+      }).then((res) =>{
+        // setIsSignUp(false);
+        if(res.ok){
+            console.log('Logged In');
+        }else{
+          return res.json().then((data)=>{
+            const errorMessage = data.error.message;
+            alert(errorMessage);
+          })
+        }
+      })
 
     }else{
       fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyA7Juq0B1seuPsQE0EpCfQm7DB3vTIDEoU',{
@@ -34,7 +54,7 @@ const AuthForm = () => {
       }).then((res) =>{
         setIsSignUp(false);
         if(res.ok){
-
+          console.log('Sign Up successfull');
         }else{
           return res.json().then((data)=>{
             const errorMessage = data.error.message;
