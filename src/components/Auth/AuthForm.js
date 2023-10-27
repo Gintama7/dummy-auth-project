@@ -64,7 +64,10 @@ const AuthForm = () => {
       }).then((res) =>{
         setIsSignUp(false);
         if(res.ok){
-          console.log('Sign Up successfull');
+          return res.json().then((data)=>{
+            authCtx.login(data.idToken);
+            history.replace('/');
+          })
         }else{
           return res.json().then((data)=>{
             const errorMessage = data.error.message;
